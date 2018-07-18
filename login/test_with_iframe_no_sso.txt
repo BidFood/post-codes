@@ -1,0 +1,13 @@
+<html>
+<head>
+<title>Test</title>
+</head>
+<body>
+    Content outside the iframe. <br/>
+    Iframe: <br/>
+    <iframe class="frame-supplier frame" name="supplier" src="https://www.bidfooddirect.co.uk/#/login/"
+        width="80%" height="700">
+    </iframe>
+</body>
+</html>
+
