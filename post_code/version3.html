@@ -21,54 +21,68 @@ function postcode_area(postcode) {
 }
 
 // AJAX technical handling
-var AREAS_ALLOWED_LIST_URL="https://raw.githubusercontent.com/htssouza/food/master/post_code/areas_allowed.txt";
+var AREAS_BLACK_LIST_URL="https://raw.githubusercontent.com/htssouza/food/master/post_code/areas_black_list.txt";
 var global_postcode = null;
 var global_area = null;
-var global_found_handler = null;
-var global_not_found_handler = null;
+var global_allowed_handler = null;
+var global_not_allowed_handler = null;
 
-function area_allowed_ajax_success(data) {
-    alert(data);
+function area_black_list_ajax_success(data) {
+    data = data.toUpperCase();
+    area = global_area.toUpperCase();
+    var found = false;
+    var lines = data.split("\n");
+    for(var index = 0; index < lines.length; index++) {
+        if (lines[index] == area) {
+            found = true;
+            break;
+        }
+    }
+    if (found) {
+        global_found_handler(global_postcode, global_area);
+    } else {
+        global_not_found_handler(global_postcode, global_area);
+    }
 }
 
-function area_allowed_ajax_fail() {
+function area_black_list_ajax_fail() {
   alert("Failed to check post code, please try again later.");
 }
 
-function area_allowed_ajax(postcode, found_handler, not_found_handler) {
+function area_black_list_ajax(postcode, found_handler, not_found_handler) {
     global_postcode = postcode;
     global_area = postcode_area(postcode);
     global_found_handler = found_handler;
     global_not_found_handler = not_found_handler;
     $.ajax({
-        url: AREAS_ALLOWED_LIST_URL,
-        success: area_allowed_ajax_success,
-        fail: area_allowed_ajax_fail});
+        url: AREAS_BLACK_LIST_URL,
+        success: area_black_list_ajax_success,
+        fail: area_black_list_ajax_fail});
 }
 
 // AJAX actions
-function area_allowed_ajax_found(postcode, area) {
+function area_black_list_found(postcode, area) {
+    alert("Sorry, we don’t currently deliver to the " + area + " area yet.");
+}
+
+function area_black_list_not_found(postcode, area) {
     var newUrl = "https://shop.urbanfoodservice.co.uk/auth/register.aspx?Postcode=";
     newUrl = newUrl + encodeURIComponent(postcode);
     window.location = newUrl;
-}
-
-function area_allowed_ajax_not_found(postcode, area) {
-    alert("Sorry, we don’t currently deliver to the " + area + " area yet.");
 }
 
 // button handler
 (function ($) {
     function bindSubmitButton() {
         $("#PSTCD_Check").click(function() {
-            var postcode = $("#postcodeInput").val().trim();
+            var postcode = $("#postcodeInput").val().trim().toUpperCase();
             if (! postcode_valid(postcode)) {
                 alert("Please enter a valid post code including the space.");
                 return;
             }
-            area_allowed_ajax(postcode,
-                              area_allowed_ajax_found,
-                              area_allowed_ajax_not_found);  
+            area_black_list_ajax(postcode,
+                                 area_black_list_found,
+                                 area_black_list_not_found);  
         });
     }
     $(document).ready(function() {
