@@ -21,13 +21,13 @@ function postcode_area(postcode) {
 }
 
 // AJAX technical handling
-var AREAS_BLACK_LIST_URL="https://raw.githubusercontent.com/htssouza/food/master/post_code/areas_black_list.txt";
+var AREAS_LIST_URL="https://raw.githubusercontent.com/htssouza/food/master/post_code/areas_list.txt";
 var global_postcode = null;
 var global_area = null;
 var global_allowed_handler = null;
 var global_not_allowed_handler = null;
 
-function area_black_list_ajax_success(data) {
+function area_list_ajax_success(data) {
     data = data.toUpperCase();
     area = global_area.toUpperCase();
     var found = false;
@@ -45,27 +45,29 @@ function area_black_list_ajax_success(data) {
     }
 }
 
-function area_black_list_ajax_fail() {
+function area_list_ajax_fail() {
   alert("Failed to check post code, please try again later.");
 }
 
-function area_black_list_ajax(postcode, found_handler, not_found_handler) {
+function area_list_ajax(postcode, found_handler, not_found_handler) {
     global_postcode = postcode;
     global_area = postcode_area(postcode);
     global_found_handler = found_handler;
     global_not_found_handler = not_found_handler;
     $.ajax({
         url: AREAS_BLACK_LIST_URL,
-        success: area_black_list_ajax_success,
-        fail: area_black_list_ajax_fail});
+        success: area_list_ajax_success,
+        fail: area_list_ajax_fail});
 }
 
 // AJAX actions
-function area_black_list_found(postcode, area) {
+// THIS CONSIDER THE LIST IS A BLACK LIST
+// INVERT THIS IF THAT IS IN FACT, A WHITE LIST
+function area_list_found(postcode, area) {
     alert("Sorry, we don't currently deliver to the " + area + " area yet.");
 }
 
-function area_black_list_not_found(postcode, area) {
+function area_list_not_found(postcode, area) {
     var newUrl = "https://shop.urbanfoodservice.co.uk/auth/register.aspx?Postcode=";
     newUrl = newUrl + encodeURIComponent(postcode);
     window.location = newUrl;
@@ -80,9 +82,7 @@ function area_black_list_not_found(postcode, area) {
                 alert("Please enter a valid post code including the space.");
                 return;
             }
-            area_black_list_ajax(postcode,
-                                 area_black_list_found,
-                                 area_black_list_not_found);  
+            area_list_ajax(postcode, area_list_found, area_list_not_found);  
         });
     }
     $(document).ready(function() {
