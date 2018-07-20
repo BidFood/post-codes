@@ -53,7 +53,7 @@ function area_list_ajax(postcode, found_handler, not_found_handler) {
     global_found_handler = found_handler;
     global_not_found_handler = not_found_handler;
     $.ajax({
-        url: AREAS_BLACK_LIST_URL,
+        url: AREAS_LIST_URL,
         success: area_list_ajax_success,
         fail: area_list_ajax_fail});
 }
