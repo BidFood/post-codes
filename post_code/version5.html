@@ -79,7 +79,7 @@ window.cookieconsent.initialise({
 			<script>
 
 			function postcode_valid(postcode) {
-			    var regex = /^[A-Z]{1,2}[0-9]{1,2} [0-9][A-Z]{2}$/i;
+					var regex = /^(GIR 0AA)|((([ABCDEFGHIJKLMNOPRSTUWYZ][0-9][0-9]?)|(([ABCDEFGHIJKLMNOPRSTUWYZ][ABCDEFGHKLMNOPQRSTUVWXY][0-9][0-9]?)|(([ABCDEFGHIJKLMNOPRSTUWYZ][0-9][ABCDEFGHJKSTUW])|([ABCDEFGHIJKLMNOPRSTUWYZ][ABCDEFGHKLMNOPQRSTUVWXY][0-9][ABEHMNPRVWXY])))) [0-9][ABDEFGHJLNPQRSTUWXYZ]{2})$/i;
 			    return regex.test(postcode);
 			}
 
@@ -136,13 +136,13 @@ window.cookieconsent.initialise({
 			}
 
 			function area_list_found(postcode, area) {
-			    postcode_message("Sorry, we don't currently deliver to the " + area + " area yet.", "orange");
+					var newUrl = "https://shop.urbanfoodservice.co.uk/auth/register.aspx?Postcode=";
+					newUrl = newUrl + encodeURIComponent(postcode);
+					window.location = newUrl;
 			}
 
 			function area_list_not_found(postcode, area) {
-			    var newUrl = "https://shop.urbanfoodservice.co.uk/auth/register.aspx?Postcode=";
-			    newUrl = newUrl + encodeURIComponent(postcode);
-			    window.location = newUrl;
+					postcode_message("Sorry, we don't currently deliver to the " + area + " area yet.", "orange");
 			}
 
 			(function ($) {
