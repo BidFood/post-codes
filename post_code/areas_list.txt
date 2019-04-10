@@ -69,6 +69,7 @@ DA8
 DA9
 E1
 E15
+E2
 E8
 E9
 EC1A
