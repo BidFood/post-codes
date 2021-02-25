@@ -13,6 +13,10 @@ B2
 B3
 B4
 B5
+B6
+B7
+B8
+B9
 BA2
 BN1
 BN10
